@@ -1,0 +1,11 @@
+server:
+  port: 8772
+
+zuul:
+  routes:
+    microservice-service-jpa:
+      path: /produce/**
+      serviceId: microservice-service-jpa
+    microservice-service-mybatis:
+      path: /produce/**
+      serviceId: microservice-service-mybatis

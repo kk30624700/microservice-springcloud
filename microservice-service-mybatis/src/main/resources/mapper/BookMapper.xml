@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.m24.demo.dao.BookMapper">
+    <cache  />
+    
+    <resultMap id="book" type="com.m24.demo.entity.Book">
+    	<id property="bookId" column="book_id"/>
+    	<result property="bookName" column="book_name"/>
+    	<result property="bookNumber" column="book_number"/>
+    </resultMap>
+
+    <!--<parameterMap id="Book" type="com.initial.entity.Book"/>-->
+    <!-- 目的：为dao接口方法提供sql语句配置 -->
+    <select id="queryById" resultMap="book" parameterType="long" useCache="true">
+        <!-- 具体的sql -->
+        SELECT
+        	book_id,book_name,book_number
+        FROM
+        	book
+        WHERE
+        	book_id = #{bookId}
+    </select>
+
+    <insert id="insertBook" parameterType="com.m24.demo.entity.Book" 
+    	useGeneratedKeys="true" keyProperty="bookId">
+        INSERT ignore INTO book(book_name,book_number )
+        VALUES (#{bookName},#{bookNumber})
+    </insert>
+    <select id="queryAll" resultMap="book" useCache="true">
+        SELECT
+        	book_id,book_name,book_number
+        FROM
+        	book
+        ORDER BY
+        	book_id
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <update id="reduceNumber" >
+        UPDATE book
+        SET book_number = book_number - 1
+        WHERE
+        	book_id = #{bookId}
+        AND number > 0
+    </update>
+</mapper>

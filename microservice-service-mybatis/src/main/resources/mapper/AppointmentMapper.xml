@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.m24.demo.dao.AppointmentMapper">
+	<cache />
+	
+	<resultMap id="appointment" type="com.m24.demo.entity.Appointment">
+		<id property="appointmentId" column="appointment_id"/>
+    	<result property="bookId" column="book_id"/>
+    	<result property="studentId" column="student_id"/>
+    	<result property="appointTime" column="appoint_time"/>
+    	<association property="book" column="book_id" select="com.m24.demo.dao.BookMapper.queryById" />
+    	<association property="student" column="student_id" select="com.m24.demo.dao.StudentMapper.queryById" />
+    </resultMap>
+    
+	<insert id="insertAppointment" useGeneratedKeys="true" keyProperty="appointmentId">
+		INSERT INTO appointment (book_id, student_id)
+		VALUES (#{bookId}, #{studentId})
+	</insert>
+	
+	<select id="queryWithStudentId" resultMap="appointment" useCache="true">
+		SELECT
+			a.appointment_id,
+			a.book_id,
+			a.student_id,
+			a.appoint_time
+		FROM
+			appointment a
+		INNER JOIN student b ON a.student_id = b.student_id
+		WHERE
+			a.student_id = #{studentId}
+	</select>
+</mapper>

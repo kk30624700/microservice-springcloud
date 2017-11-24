@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: microservice-monitor
+  cloud:
+    config:
+      fail-fast: true
+      discovery:
+        enabled: true
+        service-id: microservice-config
+  profiles:
+    active: native  
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
